@@ -31,7 +31,7 @@
     }
 
     //retrieve conf
-    fetch('https://dagyter.serveur-de-poc.pro/services.json').then(
+    fetch('services.json').then(
         function(response) {
             response.json().then(function(data) {
                 Object.keys(data).map(name => createIframe(name, data[name]))
