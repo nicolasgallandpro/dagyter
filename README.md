@@ -4,5 +4,5 @@ The goal of this projet is to easily schedule pipelines of Jupyter notebooks usi
 # Installation
 
 # Configuration
-.env
+.env  
 wrapper/services.json
