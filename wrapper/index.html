@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>{Dagyter}</title>
+</head>
+
+<body>
+        <div id="menu_back"></div>
+        <img class="logo" id="logo_jupyter" src="__jupyter.png" onclick="jupyter()" />
+        <img class="logo" id="logo_dagster" src="__dagster.png" onclick="dagster()"/>
+
+    <script>
+    //helpers
+    let root = document.documentElement;
+    function dagster(){
+            root.style.setProperty('--display-jup', "none");
+            root.style.setProperty('--display-dag', "block");
+    }
+    function jupyter(){
+            root.style.setProperty('--display-jup', "block");
+            root.style.setProperty('--display-dag', "none");
+    }
+    dagster()
+
+    function createIframe(type, url){
+        let iframe = document.createElement('iframe');
+        iframe.src = url;
+        iframe.id = type;
+        document.body.appendChild(iframe);
+    }
+
+    //retrieve conf
+    fetch('https://dagyter.serveur-de-poc.pro/services.json').then(
+        function(response) {
+            response.json().then(function(data) {
+                Object.keys(data).map(name => createIframe(name, data[name]))
+            });
+        }
+    );
+
+
+    </script>
+
+
+
+    <style>
+    element {
+    --display-jup:none;
+    --display-dag:none;
+
+    }
+    #jupyter{
+        display: var(--display-jup);
+    }
+    #dagster{
+        display: var(--display-dag);
+    }
+    iframe{
+        height: 100%;
+        width: calc(100% - 32px);
+        border:none;
+    }
+    .logo{
+        position:absolute;
+        width: 21px;
+        right:5px;
+        cursor: pointer;
+    }
+    #logo_dagster{
+        top:41px;
+    }
+    #logo_jupyter{
+        top:10px;
+    }
+    body{
+        height: 100vh;
+    }
+    #menu_back{
+        width: 32px;
+        height: 100vh;
+        position:absolute;
+        right: 0;
+        top: 0;
+        background-color:aliceblue;
+    }
+
+        /* CSS Reset */
+    * {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        box-sizing: border-box;
+        outline: none;
+        font-weight: normal;
+    }
+    a {
+        color: #000;
+        text-decoration: none;
+    }
+    .container {
+        width: 100%;
+        margin: 0 auto;
+    }
+    </style>
+
+</body>
+</html>
