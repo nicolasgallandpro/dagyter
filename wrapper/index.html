@@ -31,7 +31,7 @@
     }
 
     //retrieve conf
-    fetch('services.json').then(
+    fetch('_services.json').then(
         function(response) {
             response.json().then(function(data) {
                 Object.keys(data).map(name => createIframe(name, data[name]))
