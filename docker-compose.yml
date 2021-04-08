@@ -3,18 +3,16 @@ version: "3.7"
 services:
   dagyter_db:
     image: postgres:11
-    container_name: dagyter_db
     hostname: dagyter_db
     environment:
       POSTGRES_USER: "postgres_user"
       POSTGRES_PASSWORD: "postgres_password"
       POSTGRES_DB: "postgres_db"
 
-  dagsyter:
+  dagyter:
     build:
       context: .
       dockerfile: ./Dockerfile
-    container_name: dagyter
     expose:
       - "3000"
     ports:
