@@ -16,9 +16,10 @@ RUN pip install \
 ENV DAGSTER_HOME=/opt/dagster/dagster_home
 
 RUN mkdir -p $DAGSTER_HOME
-
 COPY dagster/dagster.yaml $DAGSTER_HOME
-
+RUN mkdir /dagyter
+COPY dagyter.py /dagyter
+ENV PYTHONSTARTUP=/dagyter/dagyter.py
 
 #------------ start
 

@@ -20,7 +20,7 @@ services:
         - "127.0.0.1:${JUPYTER_PORT}:8888"
         - "127.0.0.1:${DAGY_PORT}:8080"
     volumes:
-        - ./notebooks:/notebooks
+        - ../notebooks:/notebooks
         - ./dagster:/opt/dagster/conf
         - ./jupyter/jupyter_lab_config.py:/root/.jupyter/jupyter_server_config.py
         - ./jupyter/jupyter_lab_config.py:/root/.jupyter/jupyter_notebook_config.py
