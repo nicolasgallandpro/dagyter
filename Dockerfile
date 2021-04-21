@@ -11,7 +11,15 @@ RUN pip install \
     dagster-graphql \
     dagit \
     dagster-postgres \
-    dagstermill
+    dagstermill \ 
+    pycountry \ 
+    pandas-profiling[notebook] \
+    streamlit \ 
+    pyecharts \ 
+    plotly \
+    pyecharts \
+    streamlit-echarts 
+ 
 
 ENV DAGSTER_HOME=/opt/dagster/dagster_home
 
@@ -23,9 +31,9 @@ ENV PYTHONSTARTUP=/dagyter/dagyter.py
 
 #------------ start
 
-#workdir /notebooks/output in order to have dagster put output notebooks in this directory (didn't fount another way to configure it
-WORKDIR /notebooks/output  
-ENV PYTHONPATH "${PYTHONPATH}:/notebooks"
+#workdir /workspace/output in order to have dagster put output notebooks in this directory (didn't fount another way to configure it
+WORKDIR /workspace/output  
+ENV PYTHONPATH "${PYTHONPATH}:/workspace"
 
 COPY entrypoint.sh /opt/dagster/
 RUN chmod +x /opt/dagster/entrypoint.sh

@@ -1,15 +1,9 @@
 version: "3.7"
 
 services:
-  dagyter_db:
-    image: postgres:11
-    hostname: dagyter_db
-    environment:
-      POSTGRES_USER: "postgres_user"
-      POSTGRES_PASSWORD: "postgres_password"
-      POSTGRES_DB: "postgres_db"
 
   dagyter:
+    container_name: ${COMPOSE_PROJECT_NAME}_dagy
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -19,17 +13,14 @@ services:
         - "127.0.0.1:${DAGSTER_PORT}:3000"
         - "127.0.0.1:${JUPYTER_PORT}:8888"
         - "127.0.0.1:${DAGY_PORT}:8080"
+        - "127.0.0.1:${STREAMLIT_PORT}:8501"
     volumes:
-        - ../notebooks:/notebooks
+        - ${WORKSPACE_DIR}:/workspace
+        - ${DAGSTER_PERSISTANCE_DIR}:/dagster_db/
         - ./dagster:/opt/dagster/conf
         - ./jupyter/jupyter_lab_config.py:/root/.jupyter/jupyter_server_config.py
         - ./jupyter/jupyter_lab_config.py:/root/.jupyter/jupyter_notebook_config.py
         - ./wrapper:/wrapper
+        - ./.env:/wrapper/environment_settings
         - ~/.ssh:/root/.ssh:ro
-    environment:
-      DAGSTER_POSTGRES_USER: "postgres_user"
-      DAGSTER_POSTGRES_PASSWORD: "postgres_password"
-      DAGSTER_POSTGRES_DB: "postgres_db"
-    depends_on:
-      - dagyter_db
 

@@ -3,43 +3,21 @@ scheduler:
   class: DagsterDaemonScheduler
 
 run_storage:
-  module: dagster_postgres.run_storage
-  class: PostgresRunStorage
+  module: dagster.core.storage.runs
+  class: SqliteRunStorage
   config:
-    postgres_db:
-      hostname: dagyter_db
-      username:
-        env: DAGSTER_POSTGRES_USER
-      password:
-        env: DAGSTER_POSTGRES_PASSWORD
-      db_name:
-        env: DAGSTER_POSTGRES_DB
-      port: 5432
+    base_dir: /dagster_db
 
 schedule_storage:
-  module: dagster_postgres.schedule_storage
-  class: PostgresScheduleStorage
+  module: dagster.core.storage.schedules
+  class: SqliteScheduleStorage
   config:
-    postgres_db:
-      hostname: dagyter_db
-      username:
-        env: DAGSTER_POSTGRES_USER
-      password:
-        env: DAGSTER_POSTGRES_PASSWORD
-      db_name:
-        env: DAGSTER_POSTGRES_DB
-      port: 5432
+    base_dir: /dagster_db
 
 event_log_storage:
-  module: dagster_postgres.event_log
-  class: PostgresEventLogStorage
+  module: dagster.core.storage.event_log
+  class: SqliteEventLogStorage
   config:
-    postgres_db:
-      hostname: dagyter_db
-      username:
-        env: DAGSTER_POSTGRES_USER
-      password:
-        env: DAGSTER_POSTGRES_PASSWORD
-      db_name:
-        env: DAGSTER_POSTGRES_DB
-      port: 5432
+    base_dir: /dagster_db
+
+

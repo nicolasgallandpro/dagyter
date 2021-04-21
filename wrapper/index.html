@@ -9,6 +9,7 @@
         <div id="menu_back"></div>
         <img class="logo" id="logo_jupyter" src="__jupyter.png" onclick="jupyter()" />
         <img class="logo" id="logo_dagster" src="__dagster.png" onclick="dagster()"/>
+        <img class="logo" id="logo_streamlit" src="__streamlit.svg" onclick="streamlit()"/>
 
     <script>
     //helpers
@@ -16,10 +17,17 @@
     function dagster(){
             root.style.setProperty('--display-jup', "none");
             root.style.setProperty('--display-dag', "block");
+            root.style.setProperty('--display-lit', "none");
     }
     function jupyter(){
             root.style.setProperty('--display-jup', "block");
             root.style.setProperty('--display-dag', "none");
+            root.style.setProperty('--display-lit', "none");
+    }
+    function streamlit(){
+            root.style.setProperty('--display-jup', "none");
+            root.style.setProperty('--display-dag', "none");
+            root.style.setProperty('--display-lit', "block");
     }
     dagster()
 
@@ -31,10 +39,18 @@
     }
 
     //retrieve conf
-    fetch('_services.json').then(
+    fetch('environment_settings').then(
         function(response) {
-            response.json().then(function(data) {
-                Object.keys(data).map(name => createIframe(name, data[name]))
+            response.text().then(function(text) {
+		window.data = text;
+		lines = text.split('\n');
+		jupyter_conf = lines.filter(l => l.includes("JUPYTER_URL"));
+		streamlit_conf = lines.filter(l => l.includes("STREAMLIT_URL"));
+		dagster_conf = lines.filter(l => l.includes("DAGSTER_URL"));
+		if (jupyter_conf.length >0) createIframe('jupyter', (jupyter_conf[0]).split('=')[1])
+		if (dagster_conf.length >0) createIframe('dagster', (dagster_conf[0]).split('=')[1])
+		if (streamlit_conf.length >0) createIframe('streamlit', (streamlit_conf[0]).split('=')[1])
+                //Object.keys(data).map(name => createIframe(name, data[name]))
             });
         }
     );
@@ -48,13 +64,16 @@
     element {
     --display-jup:none;
     --display-dag:none;
-
+    --display-lit:none;
     }
     #jupyter{
         display: var(--display-jup);
     }
     #dagster{
         display: var(--display-dag);
+    }
+    #streamlit{
+        display: var(--display-lit);
     }
     iframe{
         height: 100%;
@@ -68,10 +87,13 @@
         cursor: pointer;
     }
     #logo_dagster{
-        top:47px;
+        top:55px;
     }
     #logo_jupyter{
-        top:10px;
+        top:21px;
+    }
+    #logo_streamlit{
+	top:3px
     }
     body{
         height: 100vh;

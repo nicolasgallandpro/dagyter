@@ -34,14 +34,10 @@ def notebook_solid(solid_name, file_name, *args):
     inputdef = [InputDefinition("i", str)] if len(args)>0 else None
     s = dm.define_dagstermill_solid( \
             solid_name, \
-            #_notebook_path("/notebooks/"+file_name),\
-            script_relative_path('/notebooks/'+file_name),\
+            script_relative_path('/workspace/'+file_name),\
             required_resource_keys={'file_manager'},\
             output_defs=[OutputDefinition(str)],
-            input_defs=inputdef,
-            #notebook_path='/notebooks/generated_notebooks/'
-            #asset_key_prefix='/notebooks/generated_notebooks/'#,
-            #output_notebook='latest_'+solid_name
+            input_defs=inputdef
             )
     return s(*args)
 
@@ -88,7 +84,7 @@ def create_pipeline(name, conf):
 #-------------------- repository
 @repository
 def notebooks_repository():
-    pipelines = toml.loads(open("/notebooks/schedul.toml",'r').read())
+    pipelines = toml.loads(open("/workspace/schedul.toml",'r').read())
     out = []
     for pip in pipelines:
         pipeline,schedule = create_pipeline(pip, pipelines[pip])

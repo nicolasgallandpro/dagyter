@@ -1,3 +1,3 @@
 *__pycache__
 .env
-wrapper/_services.json
+wrapper/environment_settings
