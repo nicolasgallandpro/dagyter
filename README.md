@@ -29,4 +29,21 @@ JUPYTER_URL=https://jupyter.domain.com
 STREAMLIT_URL=https://streamlit.domain.com  
 STREAMLIT_PORT=8501  
   
-
+## .env local example  
+#--- Dagyter  
+COMPOSE_PROJECT_NAME=DEV  
+DAGY_PORT=8082  
+WORKSPACE_DIR=./example-workspace  
+  
+#--- Dagster  
+DAGSTER_PORT=3004  
+DAGSTER_PERSISTANCE_DIR=../persistance/  
+DAGSTER_URL=http://localhost:3004  
+  
+#--- Jupyter  
+JUPYTER_PORT=8887  
+JUPYTER_URL=http://localhost:8887  
+  
+#--- Streamlit  
+STREAMLIT_URL=http://localhost:8501  
+STREAMLIT_PORT=8501  
