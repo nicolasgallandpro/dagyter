@@ -1,0 +1,6 @@
+[variants]
+notebooks = ["./Variants/variants.ipynb"]
+#schedule_days = "1,30,monday"
+time = "6:00"
+
+
