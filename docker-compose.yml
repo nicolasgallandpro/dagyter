@@ -10,10 +10,10 @@ services:
     expose:
       - "3000"
     ports:
-        - "127.0.0.1:${DAGSTER_PORT}:3000"
-        - "127.0.0.1:${JUPYTER_PORT}:8888"
-        - "127.0.0.1:${DAGY_PORT}:8080"
-        - "127.0.0.1:${STREAMLIT_PORT}:8501"
+        - "${DAGSTER_PORT}:3000"
+        - "${JUPYTER_PORT}:8888"
+        - "${DAGY_PORT}:8080"
+        - "${STREAMLIT_PORT}:8501"
     volumes:
         - ${WORKSPACE_DIR}:/workspace
         - ${DAGSTER_PERSISTANCE_DIR}:/dagster_db/
