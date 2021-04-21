@@ -5,11 +5,12 @@ Logger...
 
 
 # Installation
-clone...  
-docker-compose up -d  
-  
-# Configuration
-## .env
+- git clone...  
+- copy workspace-example in another directory  
+- create .env file  
+- docker-compose up -d  
+
+## .env file example
 #--- Dagyter  
 COMPOSE_PROJECT_NAME=PROD  
 DAGY_PORT=8082  
