@@ -1,9 +1,0 @@
-[pipeline1]
-notebooks = ["./p1/step1.ipynb","./p1/step2.ipynb","./p1/step3.ipynb"]
-schedule_days = "1,15, 30"
-time = "6:00"
-
-[pipeline2]
-notebooks = ["./p2/p2step1.ipynb","./p2/p2step2.ipynb","./p2/p2step3.ipynb"]
-schedule_days = "monday, tuesday"
-time = "6:00"

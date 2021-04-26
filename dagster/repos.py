@@ -9,26 +9,6 @@ import datetime as dt
 import toml
 
 
-#----------------------------- Helpers
-def generate_should_execute(schedule_days):
-    def check_schedule(scheduleExecutionContext):
-        """Analyse the schedule input and return True if the job has to be executed today"""
-        def check_one_schedule(schedule):
-            if schedule.lower() == 'everyday':
-                return True
-            if schedule.isdigit():
-                day_of_month = dt.datetime.today().day
-                return int(schedule) == day_of_month
-            if (calendar.day_name[date.today().weekday()]).lower() == schedule.lower():
-                return True
-            return False 
-        schedules = list(map(lambda x: x.strip(), schedule_days.split(',')))
-        result = reduce(lambda accu, cur: accu | check_one_schedule(cur), schedules, False )
-        return result
-    return check_schedule
-
-
-
 #----------------------------- Solid
 def notebook_solid(solid_name, file_name, *args):
     inputdef = [InputDefinition("i", str)] if len(args)>0 else None
@@ -41,15 +21,15 @@ def notebook_solid(solid_name, file_name, *args):
             )
     return s(*args)
 
-#-------------------------- Pipelines
-def create_pipeline(name, conf):
-    days = conf["schedule_days"] if "schedule_days" in conf else None
-    _time = conf["time"] if 'time' in conf else None
-    hour = int((_time.split(':'))[0]) if _time else 6
-    minute = int((_time.split(':'))[1]) if _time else 0
-    should_execute = generate_should_execute(days) if days else lambda x:True 
+def create_pipeline(name, conf, timezone):
+    time = conf["time"] if "time" in conf else '6:00'
+    (hour,minutes) = time.split(':')
+    day_of_week = conf['day_of_week'] if 'day_of_week' in conf else '*'
+    week_days = ['sunday','monday','tuesday','wednesday','thursday', 'friday','saturday','sunday']
+    day_of_week = ','.join(list(map(lambda d: '*' if d=='*' else str(week_days.index(d.lower().strip())), day_of_week.split(','))))
+    day_of_month = str(conf['day_of_month']) if 'day_of_month' in conf else '*'
+    day_of_month = ','.join(list(map(lambda d:d.strip(), day_of_month.split(','))))
     
-
     @pipeline(
         name=name,
         mode_defs=[
@@ -59,22 +39,38 @@ def create_pipeline(name, conf):
         ]
     )
     def pipeline_func():
-        previous = None
-        for notebook in conf["notebooks"]:
-            name = ((notebook.split('/'))[-1]).replace('.ipynb','')
-            if previous:
-                step = notebook_solid(name, notebook, previous)
-            else :
-                step = notebook_solid(name, notebook)
-            previous = step
-    
-    @daily_schedule(
+        node_name_from_file_name = lambda f : ((f.split('/'))[-1]).replace('.ipynb','').replace(' ','_').replace('-','_')
+        nodes = {}
+
+        #for each branch defined for the dag (one line == one branch)
+        for line in conf['dag'].split('\n'):
+            line = line.strip()
+            if line == '':
+                continue
+            previous = None
+
+            #for each notebook in the branch
+            for node_file in line.split('>>'):
+                node_file = node_file.strip()
+                name = node_name_from_file_name(node_file)
+                directory = conf['directory'] or '.'
+                directory = directory if directory[-1] == '/' else directory + '/'
+                node_file = directory + node_file
+                if name in nodes:
+                    previous = name
+                    continue
+                if previous:
+                    step = notebook_solid(name, node_file, nodes[previous])
+                else :
+                    step = notebook_solid(name, node_file)
+                nodes[name] = step
+                previous = name
+
+    @schedule(
         name="sched_"+name,
         pipeline_name=name,
-        should_execute=should_execute,
-        start_date=datetime(2020, 1, 1),
-        execution_timezone="Europe/Paris",
-        execution_time= time(hour=hour, minute=minute, second=0, microsecond=0)
+        cron_schedule=f"{minutes} {hour} {day_of_month} * {day_of_week}",
+        execution_timezone=timezone,
     )
     def schedule_func(_context):
         return {}
@@ -84,10 +80,19 @@ def create_pipeline(name, conf):
 #-------------------- repository
 @repository
 def notebooks_repository():
-    pipelines = toml.loads(open("/workspace/schedul.toml",'r').read())
+    entries = toml.loads(open("/workspace/pipelines_and_scheduling.toml",'r').read())
     out = []
-    for pip in pipelines:
-        pipeline,schedule = create_pipeline(pip, pipelines[pip])
+    timezone = 'Etc/GMT'
+
+    #for each pipeline defined in the toml file
+    for entry_name in entries:
+        #if it's a global conf
+        if entry_name.lower() == 'timezone':
+            timezone = entries[entry_name]
+            continue
+        
+        #else, it's a pipeline
+        pipeline,schedule = create_pipeline(entry_name, entries[entry_name], timezone)
         out.append(pipeline)
         out.append(schedule)
     return out
