@@ -8,6 +8,7 @@ import calendar
 import datetime as dt
 import toml
 
+standard_dagster_name = lambda name:name.replace('-','_').replace(' ', '_')
 
 #----------------------------- Solid
 def notebook_solid(solid_name, file_name, *args):
@@ -39,7 +40,7 @@ def create_pipeline(name, conf, timezone):
         ]
     )
     def pipeline_func():
-        node_name_from_file_name = lambda f : ((f.split('/'))[-1]).replace('.ipynb','').replace(' ','_').replace('-','_')
+        node_name_from_file_name = lambda f : standard_dagster_name(((f.split('/'))[-1]).replace('.ipynb',''))
         nodes = {}
 
         #for each branch defined for the dag (one line == one branch)
@@ -92,7 +93,7 @@ def notebooks_repository():
             continue
         
         #else, it's a pipeline
-        pipeline,schedule = create_pipeline(entry_name, entries[entry_name], timezone)
+        pipeline,schedule = create_pipeline(standard_dagster_name(entry_name), entries[entry_name], timezone)
         out.append(pipeline)
         out.append(schedule)
     return out

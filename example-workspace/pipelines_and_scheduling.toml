@@ -1,14 +1,14 @@
 timezone = "Europe/Paris"
 
 
-[simple]
+[simple_pipeline]
 directory = "simple_pipeline"
 dag = " first_step.ipynb  >>  second_step.ipynb  >>  third_step.ipynb"
 day_of_month = "1, 15"
 #default time is 6:00 am
 
 
-[complex]
+[complex_pipeline]
 directory = "complex_pipeline"
 dag = """ 1.ipynb >> 2.ipynb >> 2a.ipynb
                      2.ipynb >> 2b.ipynb 
