@@ -12,7 +12,7 @@ standard_dagster_name = lambda name:name.replace('-','_').replace(' ', '_')
 
 #----------------------------- Solid
 def notebook_solid(solid_name, file_name, *args):
-    inputdef = [InputDefinition("i", str)] if len(args)>0 else None
+    inputdef = list(map(lambda x:InputDefinition("i", list),args))
     s = dm.define_dagstermill_solid( \
             solid_name, \
             script_relative_path('/workspace/'+file_name),\
@@ -21,6 +21,7 @@ def notebook_solid(solid_name, file_name, *args):
             input_defs=inputdef
             )
     return s(*args)
+
 
 def create_pipeline(name, conf, timezone):
     time = conf["time"] if "time" in conf else '6:00'
@@ -41,31 +42,46 @@ def create_pipeline(name, conf, timezone):
     )
     def pipeline_func():
         node_name_from_file_name = lambda f : standard_dagster_name(((f.split('/'))[-1]).replace('.ipynb',''))
-        nodes = {}
+        dependencies = {}
 
+        #step 1 : list all dependencies
         #for each branch defined for the dag (one line == one branch)
-        for line in conf['dag'].split('\n'):
+        for line in conf['dag'].split('\n'): 
             line = line.strip()
             if line == '':
                 continue
             previous = None
-
-            #for each notebook in the branch
             for node_file in line.split('>>'):
                 node_file = node_file.strip()
-                name = node_name_from_file_name(node_file)
-                directory = conf['directory'] or '.'
-                directory = directory if directory[-1] == '/' else directory + '/'
-                node_file = directory + node_file
-                if name in nodes:
-                    previous = name
-                    continue
-                if previous:
-                    step = notebook_solid(name, node_file, nodes[previous])
-                else :
-                    step = notebook_solid(name, node_file)
-                nodes[name] = step
-                previous = name
+                if node_file not in dependencies:
+                    dependencies[node_file] = []
+                if previous != None:
+                    (dependencies[node_file]).append(previous)
+                previous = node_file
+
+        #step 2 : create solids
+        already_created = {}
+        len_nodes = []
+        trace = []
+        def get_solid_and_dependencies(node_file):
+            len_nodes.append('.')
+            if len(len_nodes) > 1000:
+                raise Exception("More than 1000 nodes created. Cyclic dependency ?")
+            if node_file in already_created:
+                return already_created[node_file]
+            node_name = node_name_from_file_name(node_file)
+            directory = conf['directory'] if 'directory' in conf else '.'
+            directory = directory if directory[-1] == '/' else directory + '/'
+            if len(dependencies[node_file]) == 0:
+                node = notebook_solid(node_name, directory + node_file)
+            else:
+                deps = list(map(lambda d:get_solid_and_dependencies(d), dependencies[node_file]))
+                node = notebook_solid(node_name, directory + node_file, deps) 
+            already_created[node_file] = node
+            return node
+
+        for node_file in dependencies:
+            get_solid_and_dependencies(node_file)
 
     @schedule(
         name="sched_"+name,
