@@ -6,7 +6,7 @@ Logger...
 
 # Installation
 - git clone...  
-- copy workspace-example in another directory  
+- copy workspace-example in another directory. You can add directories named "not_versionned" in any directory, they will be ignored
 - create .env file  
 - docker-compose up -d  
 
