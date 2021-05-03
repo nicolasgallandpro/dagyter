@@ -2,6 +2,10 @@ FROM nicogalland/python-base-data-eng-light:latest
 
 RUN mkdir /root/.ssh
 
+#------------ nodejs (for jupyter lab extensions
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - 
+RUN apt-get install -y nodejs
+
 #------------ jupyter
 RUN pip install jupyterlab jupyterlab-git toml
 
@@ -32,7 +36,7 @@ ENV PYTHONSTARTUP=/dagyter/dagyter.py
 #------------ start
 
 #workdir /workspace/output in order to have dagster put output notebooks in this directory (didn't fount another way to configure it
-WORKDIR /workspace/output  
+WORKDIR /workspace/OUTPUT/not_versionned  
 ENV PYTHONPATH "${PYTHONPATH}:/workspace"
 
 COPY entrypoint.sh /opt/dagster/
