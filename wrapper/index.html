@@ -6,11 +6,11 @@
 </head>
 
 <body>
-        <div id="menu_back"></div>
-        <img class="logo" id="logo_jupyter" src="__jupyter.png" onclick="jupyter()" />
-        <img class="logo" id="logo_dagster" src="__dagster.png" onclick="dagster()"/>
+        <div id="menu_back">
         <img class="logo" id="logo_streamlit" src="__streamlit.svg" onclick="streamlit()"/>
-
+        <img class="logo" id="logo_dagster" src="__dagster.png" onclick="dagster()"/>
+        <img class="logo" id="logo_jupyter" src="__jupyter.png" onclick="jupyter()" />
+	</div>
     <script>
     //helpers
     let root = document.documentElement;
@@ -81,19 +81,11 @@
         border:none;
     }
     .logo{
-        position:absolute;
         width: 24px;
-        right:6px;
         cursor: pointer;
-    }
-    #logo_dagster{
-        top:55px;
-    }
-    #logo_jupyter{
-        top:21px;
-    }
-    #logo_streamlit{
-	top:3px
+	margin-left:7px;
+	padding-bottom:10px;
+	padding-top:16px;
     }
     body{
         height: 100vh;
