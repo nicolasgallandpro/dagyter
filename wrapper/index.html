@@ -7,30 +7,22 @@
 
 <body>
         <div id="menu_back">
-        <img class="logo" id="logo_streamlit" src="__streamlit.svg" onclick="streamlit()"/>
-        <img class="logo" id="logo_dagster" src="__dagster.png" onclick="dagster()"/>
-        <img class="logo" id="logo_jupyter" src="__jupyter.png" onclick="jupyter()" />
+        <img class="logo" id="logo_streamlit" src="__streamlit.svg" onclick="activate('lit')"/>
+        <img class="logo" id="logo_dagster" src="__dagster.png" onclick="activate('dag')"/>
+        <img class="logo" id="logo_jupyter" src="__jupyter.png" onclick="activate('jup')" />
 	</div>
     <script>
     //helpers
     let root = document.documentElement;
-    function dagster(){
-            root.style.setProperty('--display-jup', "none");
-            root.style.setProperty('--display-dag', "block");
-            root.style.setProperty('--display-lit', "none");
+    let activate = (app) => {
+	['jup','dag','lit'].map(a => {
+		root.style.setProperty('--display-'+a, "none");
+		root.style.setProperty('--color-'+a, "transparent");
+	})
+	root.style.setProperty('--display-'+app, "block");
+	root.style.setProperty('--color-'+app, "white");
     }
-    function jupyter(){
-            root.style.setProperty('--display-jup', "block");
-            root.style.setProperty('--display-dag', "none");
-            root.style.setProperty('--display-lit', "none");
-    }
-    function streamlit(){
-            root.style.setProperty('--display-jup', "none");
-            root.style.setProperty('--display-dag', "none");
-            root.style.setProperty('--display-lit', "block");
-    }
-    dagster()
-
+    activate('dag')
     function createIframe(type, url){
         let iframe = document.createElement('iframe');
         iframe.src = url;
@@ -65,6 +57,9 @@
     --display-jup:none;
     --display-dag:none;
     --display-lit:none;
+    --color-jup:transparent;
+    --color-dag:transparent;
+    --color-lit:transparent;
     }
     #jupyter{
         display: var(--display-jup);
@@ -81,11 +76,15 @@
         border:none;
     }
     .logo{
-        width: 24px;
+        width: 100%;
         cursor: pointer;
-	margin-left:7px;
-	padding-bottom:10px;
-	padding-top:16px;
+	padding:16px 7px 10px 7px;
+    }
+    #logo_jupyter { background-color:var(--color-jup);}
+    #logo_dagster { background-color:var(--color-dag);}
+    #logo_streamlit { 
+	    background-color:var(--color-lit);
+	    padding-top:23px;
     }
     body{
         height: 100vh;
