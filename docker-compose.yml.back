@@ -15,3 +15,17 @@ services:
         - ./jupyter/jupyter_lab_config.py:/root/.jupyter/jupyter_notebook_config.py
         - ~/.ssh:/root/.ssh:ro
 
+  bindapps:
+    container_name: ${COMPOSE_PROJECT_NAME}_bindapps
+    image: caddy
+    env_file:
+      - ./.bindapps.env
+      - .env
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+        - ./caddy_data:/data
+        - ./wrapper:/site
+        - ./Caddyfile:/etc/caddy/Caddyfile
+        - ./.bindapps.env:/site/environment_settings

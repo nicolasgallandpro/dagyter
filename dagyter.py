@@ -1,4 +1,7 @@
 import dagstermill,sys
+"""
+This file is loaded at the startup of python. So Logger class can be used everywhere (dagster and jupyter)
+"""
 
 class logger:
     def info(*args):

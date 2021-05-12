@@ -7,26 +7,35 @@
 
 <body>
         <div id="menu_back">
-        <img class="logo" id="logo_streamlit" src="__streamlit.svg" onclick="activate('lit')"/>
-        <img class="logo" id="logo_dagster" src="__dagster.png" onclick="activate('dag')"/>
-        <img class="logo" id="logo_jupyter" src="__jupyter.png" onclick="activate('jup')" />
+        <img class="logo" id="logo_streamlit" src="static/streamlit.svg" onclick="activate('streamlit')"/>
+        <img class="logo" id="logo_dagster" src="static/dagster.png" onclick="activate('dagster')"/>
+        <img class="logo" id="logo_jupyter" src="static/jupyter.png" onclick="activate('jupyter')" style="background-color: var(--color-jupyter)" />
 	</div>
-    <script>
+
+
+	<script>
+    
+
+
+
     //helpers
     let root = document.documentElement;
     let activate = (app) => {
-	['jup','dag','lit'].map(a => {
+	['jupyter','dagster','streamlit'].map(a => {
 		root.style.setProperty('--display-'+a, "none");
 		root.style.setProperty('--color-'+a, "transparent");
 	})
 	root.style.setProperty('--display-'+app, "block");
 	root.style.setProperty('--color-'+app, "white");
     }
-    activate('dag')
-    function createIframe(type, url){
+    activate('dagster')
+    function addApp(app, url, active=false){
+	// ajoute les variables css
+	active ? root.style.setProperty('--display-'+app, "block") : root.style.setProperty('--display-'+app, "none");
+	active ? root.style.setProperty('--color-'+app, "white") : root.style.setProperty('--color-'+app, "transparent");
         let iframe = document.createElement('iframe');
         iframe.src = url;
-        iframe.id = type;
+        iframe.id = app;
         document.body.appendChild(iframe);
     }
 
@@ -39,9 +48,9 @@
 		jupyter_conf = lines.filter(l => l.includes("JUPYTER_URL"));
 		streamlit_conf = lines.filter(l => l.includes("STREAMLIT_URL"));
 		dagster_conf = lines.filter(l => l.includes("DAGSTER_URL"));
-		if (jupyter_conf.length >0) createIframe('jupyter', (jupyter_conf[0]).split('=')[1])
-		if (dagster_conf.length >0) createIframe('dagster', (dagster_conf[0]).split('=')[1])
-		if (streamlit_conf.length >0) createIframe('streamlit', (streamlit_conf[0]).split('=')[1])
+		if (jupyter_conf.length >0) addApp('jupyter', (jupyter_conf[0]).split('=')[1])
+		if (dagster_conf.length >0) addApp('dagster', (dagster_conf[0]).split('=')[1])
+		if (streamlit_conf.length >0) addApp('streamlit', (streamlit_conf[0]).split('=')[1], true)
                 //Object.keys(data).map(name => createIframe(name, data[name]))
             });
         }
@@ -53,22 +62,22 @@
 
 
     <style>
-    element {
+   /* element {
     --display-jup:none;
     --display-dag:none;
     --display-lit:none;
     --color-jup:transparent;
     --color-dag:transparent;
     --color-lit:transparent;
-    }
+    }*/
     #jupyter{
-        display: var(--display-jup);
+        display: var(--display-jupyter);
     }
     #dagster{
-        display: var(--display-dag);
+        display: var(--display-dagster);
     }
     #streamlit{
-        display: var(--display-lit);
+        display: var(--display-streamlit);
     }
     iframe{
         height: 100%;
@@ -80,11 +89,10 @@
         cursor: pointer;
 	padding:16px 8px 10px 8px;
     }
-    #logo_jupyter { background-color:var(--color-jup);}
-    #logo_dagster { background-color:var(--color-dag);}
+    #logo_jupyter { /*background-color:var(--color-jupyter);*/}
+    #logo_dagster { background-color:var(--color-dagster);}
     #logo_streamlit { 
-	    background-color:var(--color-lit);
-	    padding-top:23px;
+	    background-color:var(--color-streamlit);
     }
     body{
         height: 100vh;
