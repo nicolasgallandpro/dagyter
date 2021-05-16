@@ -22,6 +22,7 @@ RUN pip install \
     pyecharts \ 
     plotly \
     pyecharts \
+    icecream \
     streamlit-echarts 
  
 
