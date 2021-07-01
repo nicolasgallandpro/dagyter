@@ -40,7 +40,7 @@ ENV PYTHONSTARTUP=/dagyter/dagyter.py
 #------------ start
 
 #workdir /workspace/output in order to have dagster put output notebooks in this directory (didn't fount another way to configure it
-WORKDIR /workspace/OUTPUT/not_versionned  
+WORKDIR /workspace/_SILVER/not_versionned  
 ENV PYTHONPATH "${PYTHONPATH}:/workspace"
 
 COPY entrypoint.sh /opt/dagster/

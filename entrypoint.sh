@@ -3,7 +3,7 @@
 dagster-daemon run &
 dagit -h "0.0.0.0" -p "3000" -w "/opt/dagster/conf/workspace.yaml" &
 
-streamlit run /workspace/OUTPUT/streamlitbook.py  &
+streamlit run /workspace/_TOOLS/streamlitbook.py  &
 
 #python /wrapper/run.py &
 
