@@ -10,8 +10,8 @@ services:
     volumes:
         - ${WORKSPACE_DIR}:/workspace
         - ${DAGSTER_PERSISTANCE_DIR}:/dagster_db/
-        - ./dagster:/opt/dagster/conf
-        - ./jupyter/jupyter_lab_config.py:/root/.jupyter/jupyter_server_config.py
-        - ./jupyter/jupyter_lab_config.py:/root/.jupyter/jupyter_notebook_config.py
+          #- ./dagster:/opt/dagster/conf
+          #- ./jupyter/jupyter_lab_config.py:/root/.jupyter/jupyter_server_config.py
+          #- ./jupyter/jupyter_lab_config.py:/root/.jupyter/jupyter_notebook_config.py
         - ~/.ssh:/root/.ssh:ro
 
