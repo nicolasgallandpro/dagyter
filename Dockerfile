@@ -32,7 +32,7 @@ RUN mkdir -p $DAGSTER_HOME
 COPY dagster/dagster.yaml $DAGSTER_HOME
 RUN mkdir /dagyter
 COPY dagyter.py /dagyter
-COPY dagster /otp/dagster/conf
+COPY dagster /opt/dagster/conf
 COPY jupyter/jupyter_lab_config.py /root/.jupyter/jupyter_server_config.py
 COPY jupyter/jupyter_lab_config.py /root/.jupyter/jupyter_notebook_config.py
 ENV PYTHONSTARTUP=/dagyter/dagyter.py
