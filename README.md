@@ -4,7 +4,7 @@ The goal of this projet is to easily schedule pipelines of Jupyter notebooks usi
 
 # Features
 - a container that includes : a pre-configured Dagster+Dagstermill (port 3000), a Jupyter notebook (port 8888), and Streamlit (port 5001)
-- a simplified way to schedule notebooks via a toml file instead of python files 
+- a simplified way to schedule pipelines of notebooks via a basic toml file 
 - a logger class to make it easier to log in the same time in the notebook AND in dagster logs (you just have to use logger.info() or logger.error() instead of print() in the notebooks and the output will be visible in the notebooks AND in dagster logs)
 
 All your codes (notebooks, dagster dags conf, python files, ...) must be mounted in the /workspace directory of the container.
