@@ -1,10 +1,10 @@
 # Dagyter
-The goal of this projet is to easily schedule pipelines of Jupyter notebooks using Dagster.  
+The goal of this projet is to easily schedule pipelines of Jupyter notebooks using Dagster (and Dagstermill).  
 
 
 # How it works
 Dagyter includes:
-- a Dagster installation (port 3000)
+- a Dagster/Dagstermill installation (port 3000)
 - a Jupyter notebook (port 8888)
 - a Streamlit (port 5001)
 
@@ -15,7 +15,7 @@ You can find examples of Dagyter configurations (local and server) here : https:
 # Features
 Dagyter offers some features :
 - a pre-configured Dagster / Dagstermill / Jupyter / Streamlit
-- a simplified way to schedule notebooks via a toml file
+- a simplified way to schedule notebooks via a toml file instead of python files 
 - a logger class to make it easier to log in the same time in the notebook AND in dagster logs (you just have to use logger.info() or logger.error() instead of print() in the notebooks and the output will be visible in the notebooks AND in dagster logs)
 
 
