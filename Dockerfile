@@ -15,32 +15,31 @@ RUN pip install \
     dagster-graphql \
     dagit \
     dagster-postgres \
-    dagstermill \ 
+    dagstermill 
+RUN pip install \
     pycountry \ 
-    pandas-profiling[notebook] \
     streamlit \ 
-    pyecharts \ 
     plotly \
-    pyecharts \
-    icecream \
-    streamlit-echarts 
- 
+    icecream 
+
+#mito
+RUN pip install mitoinstaller 
+#RUN python3 -m mitoinstaller install
 
 ENV DAGSTER_HOME=/opt/dagster/dagster_home
 
 RUN mkdir -p $DAGSTER_HOME
 COPY dagster/dagster.yaml $DAGSTER_HOME
 RUN mkdir /dagyter
-COPY dagyter.py /dagyter
 COPY dagster /opt/dagster/conf
 COPY jupyter/jupyter_lab_config.py /root/.jupyter/jupyter_server_config.py
 COPY jupyter/jupyter_lab_config.py /root/.jupyter/jupyter_notebook_config.py
-ENV PYTHONSTARTUP=/dagyter/dagyter.py
+#ENV PYTHONSTARTUP=/dagyter/dagyter.py
 
 #------------ start
 
 #workdir /workspace/output in order to have dagster put output notebooks in this directory (didn't fount another way to configure it
-WORKDIR /workspace/_SILVER/not_versionned  
+WORKDIR /workspace/_SILVER/not_versioned  
 ENV PYTHONPATH "${PYTHONPATH}:/workspace"
 
 COPY entrypoint.sh /opt/dagster/
