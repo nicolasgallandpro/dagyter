@@ -1,0 +1,24 @@
+version: "3.7"
+
+services:
+
+  dagyter:
+    hostname: dagyter
+    image: nicogalland/python-base-data-eng-light:4.5
+    environment:
+      DAGSTER_HOME: /opt/dagster/dagster_home
+    volumes:
+        - ./workspace:/workspace
+        - ./persistance/dagster:/dagster_db/
+        - ./entrypoint.sh:/entrypoint.sh
+        - ./workspace/dagster_workspace.yaml:/opt/dagster/conf/workspace.yaml
+        - ./dagster.yaml:/opt/dagster/dagster_home/dagster.yaml
+        - ./persistance/datasets:/opt/dagster/dagster_home/storage/
+        - ./jupyterlab.conf:/root/.jupyter/jupyter_notebook_config.py
+        - ./jupyterlab.conf:/root/.jupyter/jupyter_server_config.py
+    entrypoint:
+      - bash
+      - /entrypoint.sh
+    ports:
+      - "3000:3000"
+      - "8888:8888"

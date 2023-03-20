@@ -1,0 +1,18 @@
+timezone = "Europe/Paris"
+
+
+[simple]
+directory = "simple_pipeline"
+dag = " first_step.ipynb  >>  second_step.ipynb  >>  third_step.ipynb"
+day_of_month = "1, 15"
+#default time is 6:00 am
+
+
+[complex]
+directory = "complex_pipeline"
+dag = """ notebook_1a.ipynb >> notebook_2.ipynb >> notebook_3a.ipynb >> notebook_4.ipynb
+          notebook_1b.ipynb >> notebook_2.ipynb
+                      notebook_2.ipynb >> notebook_3b.ipynb
+                      notebook_2.ipynb >> notebook_3c.ipynb                """
+day_of_week = "monday, tuesday"
+time = "*:35"

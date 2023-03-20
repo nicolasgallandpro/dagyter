@@ -19,5 +19,3 @@ event_log_storage:
   class: SqliteEventLogStorage
   config:
     base_dir: /dagster_db
-
-
