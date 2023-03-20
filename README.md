@@ -10,4 +10,6 @@ An example with a more complex dag
 
 ## Getting started
 You can call the "create_definitions" function of dagyter.py with the toml file as argument :  
-defs = create_definitions("/workspace/pipelines_and_scheduling.toml")
+defs = create_definitions("/workspace/pipelines_and_scheduling.toml")  
+  
+You can find a full docker example in the "example" directory.
