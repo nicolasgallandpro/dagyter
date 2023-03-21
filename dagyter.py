@@ -3,6 +3,11 @@ from dagster import asset, AssetIn, AssetKey, Definitions, define_asset_job, Sch
 import pandas as pd, numpy as np
 from dagster.utils import script_relative_path
 import toml
+try:
+    from jupyter_notebook_parser import JupyterNotebookParser
+    notebookparser = True
+except:
+    notebookparser = False
 
 #----------------------------- helpers
 standard_dagster_name = lambda name:name.replace('-','_').replace(' ', '_')
@@ -32,16 +37,23 @@ def dag_conf_to_dependencies(conf):
 def create_notebook_asset(asset_name, file_path, group_name, _ins=[]):
     """Create an asset from a notebook. _ins are input assets"""
     #print(file_name, asset_name, group_name)
+    full_path = script_relative_path('/workspace/'+file_path)
     ins = {}
     for _in in _ins:
         dep_name = asset_name_from_file_name(_in)
         ins[dep_name] = AssetIn(key=AssetKey(dep_name)) 
     #print(asset_name)
+    if notebookparser:
+        cells = JupyterNotebookParser(full_path).get_markdown_cells() 
+        description = '' if len(cells)==0 else ''.join(cells[0]['source'])
+    else:
+        description = 'No description markdown cell'
     return define_dagstermill_asset(
         name=asset_name,
-        notebook_path=script_relative_path('/workspace/'+file_path),
+        notebook_path=full_path,
         group_name=group_name,
         key_prefix=group_name,
+        description=description,
         ins=ins)
 
 
