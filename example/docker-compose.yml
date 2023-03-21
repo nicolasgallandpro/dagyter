@@ -11,7 +11,6 @@ services:
         - ./workspace:/workspace
         - ./persistance/dagster:/dagster_db/
         - ./entrypoint.sh:/entrypoint.sh
-        - ./workspace/dagster_workspace.yaml:/opt/dagster/conf/workspace.yaml
         - ./dagster.yaml:/opt/dagster/dagster_home/dagster.yaml
         - ./persistance/datasets:/opt/dagster/dagster_home/storage/
         - ./jupyterlab.conf:/root/.jupyter/jupyter_notebook_config.py
